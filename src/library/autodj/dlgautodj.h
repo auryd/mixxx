@@ -13,7 +13,7 @@
 #include "preferences/usersettings.h"
 #include "track/track_decl.h"
 
-class PlaylistTableModel;
+class StemsMixTableModel;
 class WLibrary;
 class WTrackTableView;
 
@@ -38,7 +38,6 @@ class DlgAutoDJ : public QWidget, public Ui::DlgAutoDJ, public LibraryView {
     bool restoreCurrentViewState() override;
 
   public slots:
-    void shufflePlaylistButton(bool buttonChecked);
     void skipNextButton(bool buttonChecked);
     void fadeNowButton(bool buttonChecked);
     void toggleAutoDJButton(bool enable);
@@ -47,7 +46,7 @@ class DlgAutoDJ : public QWidget, public Ui::DlgAutoDJ, public LibraryView {
     void autoDJStateChanged(AutoDJProcessor::AutoDJState state);
     void updateSelectionInfo();
     void slotTransitionModeChanged(int comboboxIndex);
-    void slotRepeatPlaylistChanged(int checkedState);
+    void slotRepeatStemsMixChanged(int checkedState);
 
   signals:
     void addRandomTrackButton(bool buttonChecked);
@@ -67,7 +66,7 @@ class DlgAutoDJ : public QWidget, public Ui::DlgAutoDJ, public LibraryView {
     WTrackTableView* const m_pTrackTableView;
     const bool m_bShowButtonText;
 
-    PlaylistTableModel* m_pAutoDJTableModel;
+    StemsMixTableModel* m_pAutoDJTableModel;
 
     QString m_enableBtnTooltip;
     QString m_disableBtnTooltip;

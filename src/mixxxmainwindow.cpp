@@ -773,6 +773,11 @@ void MixxxMainWindow::connectMenuBar() {
                 m_pCoreServices->getLibrary().get(),
                 &Library::slotCreatePlaylist,
                 Qt::UniqueConnection);
+        connect(m_pMenuBar,
+                &WMainMenuBar::createStemsMix,
+                m_pCoreServices->getLibrary().get(),
+                &Library::slotCreateStemsMix,
+                Qt::UniqueConnection);
     }
 
 #ifdef __ENGINEPRIME__

@@ -267,7 +267,7 @@ TEST_F(AutoDJProcessorTest, FullIntroOutro_LongerIntro) {
     // Indicate the track loaded successfully.
     deck1.fakeTrackLoadedEvent(pTrack);
 
-    PlaylistTableModel* pAutoDJTableModel = pProcessor->getTableModel();
+    StemsMixTableModel* pAutoDJTableModel = pProcessor->getTableModel();
     pAutoDJTableModel->appendTrack(testId);
 
     EXPECT_EQ(AutoDJProcessor::ADJ_DISABLED, pProcessor->getState());
@@ -341,7 +341,7 @@ TEST_F(AutoDJProcessorTest, FullIntroOutro_LongerOutro) {
     // Indicate the track loaded successfully.
     deck1.fakeTrackLoadedEvent(pTrack);
 
-    PlaylistTableModel* pAutoDJTableModel = pProcessor->getTableModel();
+    StemsMixTableModel* pAutoDJTableModel = pProcessor->getTableModel();
     pAutoDJTableModel->appendTrack(testId);
 
     EXPECT_EQ(AutoDJProcessor::ADJ_DISABLED, pProcessor->getState());
@@ -421,7 +421,7 @@ TEST_F(AutoDJProcessorTest, FadeAtOutroStart_LongerIntro) {
     // Indicate the track loaded successfully.
     deck1.fakeTrackLoadedEvent(pTrack);
 
-    PlaylistTableModel* pAutoDJTableModel = pProcessor->getTableModel();
+    StemsMixTableModel* pAutoDJTableModel = pProcessor->getTableModel();
     pAutoDJTableModel->appendTrack(testId);
 
     EXPECT_EQ(AutoDJProcessor::ADJ_DISABLED, pProcessor->getState());
@@ -497,7 +497,7 @@ TEST_F(AutoDJProcessorTest, FadeAtOutroStart_LongerOutro) {
     // Indicate the track loaded successfully.
     deck1.fakeTrackLoadedEvent(pTrack);
 
-    PlaylistTableModel* pAutoDJTableModel = pProcessor->getTableModel();
+    StemsMixTableModel* pAutoDJTableModel = pProcessor->getTableModel();
     pAutoDJTableModel->appendTrack(testId);
 
     EXPECT_EQ(AutoDJProcessor::ADJ_DISABLED, pProcessor->getState());
@@ -605,7 +605,7 @@ TEST_F(AutoDJProcessorTest, EnabledSuccess_DecksStopped) {
     TrackId testId = addTrackToCollection(kTrackLocationTest);
     ASSERT_TRUE(testId.isValid());
 
-    PlaylistTableModel* pAutoDJTableModel = pProcessor->getTableModel();
+    StemsMixTableModel* pAutoDJTableModel = pProcessor->getTableModel();
     // Need two tracks -- one to be loaded in the left deck and one to load in
     // the right deck.
     pAutoDJTableModel->appendTrack(testId);
@@ -656,7 +656,7 @@ TEST_F(AutoDJProcessorTest, EnabledSuccess_DecksStopped_TrackLoadFails) {
     TrackId testId = addTrackToCollection(kTrackLocationTest);
     ASSERT_TRUE(testId.isValid());
 
-    PlaylistTableModel* pAutoDJTableModel = pProcessor->getTableModel();
+    StemsMixTableModel* pAutoDJTableModel = pProcessor->getTableModel();
     // Need three tracks -- one to be loaded in the left deck (failing to load),
     // one to load in the left deck (succeeding) and one to load in the right
     // deck (succeeding).
@@ -726,7 +726,7 @@ TEST_F(AutoDJProcessorTest, EnabledSuccess_DecksStopped_TrackLoadFailsRightDeck)
     TrackId testId = addTrackToCollection(kTrackLocationTest);
     ASSERT_TRUE(testId.isValid());
 
-    PlaylistTableModel* pAutoDJTableModel = pProcessor->getTableModel();
+    StemsMixTableModel* pAutoDJTableModel = pProcessor->getTableModel();
     // Need three tracks -- one to be loaded in the left deck (succeeding), one
     // to load in the right deck (failing) and one to load in the right deck
     // (succeeding).
@@ -807,7 +807,7 @@ TEST_F(AutoDJProcessorTest, EnabledSuccess_PlayingDeck1) {
     // Arbitrary to check that it was unchanged.
     master.crossfader.set(0.2447);
 
-    PlaylistTableModel* pAutoDJTableModel = pProcessor->getTableModel();
+    StemsMixTableModel* pAutoDJTableModel = pProcessor->getTableModel();
     pAutoDJTableModel->appendTrack(testId);
 
     EXPECT_CALL(*pProcessor, emitAutoDJStateChanged(AutoDJProcessor::ADJ_IDLE));
@@ -846,7 +846,7 @@ TEST_F(AutoDJProcessorTest, EnabledSuccess_PlayingDeck1_TrackLoadFailed) {
     // Arbitrary to check that it was unchanged.
     master.crossfader.set(0.2447);
 
-    PlaylistTableModel* pAutoDJTableModel = pProcessor->getTableModel();
+    StemsMixTableModel* pAutoDJTableModel = pProcessor->getTableModel();
     // The first track will fail to load and the second will succeed.
     pAutoDJTableModel->appendTrack(testId);
     pAutoDJTableModel->appendTrack(testId);
@@ -902,7 +902,7 @@ TEST_F(AutoDJProcessorTest, EnabledSuccess_PlayingDeck2) {
     // Arbitrary to check that it was unchanged.
     master.crossfader.set(0.2447);
 
-    PlaylistTableModel* pAutoDJTableModel = pProcessor->getTableModel();
+    StemsMixTableModel* pAutoDJTableModel = pProcessor->getTableModel();
     pAutoDJTableModel->appendTrack(testId);
 
     EXPECT_CALL(*pProcessor, emitAutoDJStateChanged(AutoDJProcessor::ADJ_IDLE));
@@ -942,7 +942,7 @@ TEST_F(AutoDJProcessorTest, EnabledSuccess_PlayingDeck2_TrackLoadFailed) {
     // Arbitrary to check that it was unchanged.
     master.crossfader.set(0.2447);
 
-    PlaylistTableModel* pAutoDJTableModel = pProcessor->getTableModel();
+    StemsMixTableModel* pAutoDJTableModel = pProcessor->getTableModel();
     // The first track will fail to load and the second will succeed.
     pAutoDJTableModel->appendTrack(testId);
     pAutoDJTableModel->appendTrack(testId);
@@ -988,7 +988,7 @@ TEST_F(AutoDJProcessorTest, EnabledDisabledSuccess) {
     TrackId testId = addTrackToCollection(kTrackLocationTest);
     ASSERT_TRUE(testId.isValid());
 
-    PlaylistTableModel* pAutoDJTableModel = pProcessor->getTableModel();
+    StemsMixTableModel* pAutoDJTableModel = pProcessor->getTableModel();
     pAutoDJTableModel->appendTrack(testId);
 
     AutoDJProcessor::AutoDJError err = pProcessor->toggleAutoDJ(true);
@@ -1013,7 +1013,7 @@ TEST_F(AutoDJProcessorTest, FadeToDeck1_LoadOnDeck2_TrackLoadSuccess) {
     // Indicate the track loaded successfully.
     deck2.fakeTrackLoadedEvent(pTrack);
 
-    PlaylistTableModel* pAutoDJTableModel = pProcessor->getTableModel();
+    StemsMixTableModel* pAutoDJTableModel = pProcessor->getTableModel();
     // The first track is loaded into deck 1 and the second track is loaded into
     // deck 2 after we fade to deck 1.
     pAutoDJTableModel->appendTrack(testId);
@@ -1100,7 +1100,7 @@ TEST_F(AutoDJProcessorTest, FadeToDeck1_LoadOnDeck2_TrackLoadFailed) {
     // Indicate the track loaded successfully.
     deck2.fakeTrackLoadedEvent(pTrack);
 
-    PlaylistTableModel* pAutoDJTableModel = pProcessor->getTableModel();
+    StemsMixTableModel* pAutoDJTableModel = pProcessor->getTableModel();
     // The first track is loaded into deck 1, the second track is loaded into
     // deck 2 (fails) after we fade to deck 1, and the third is loaded into deck
     // 2 (succeeds).
@@ -1203,7 +1203,7 @@ TEST_F(AutoDJProcessorTest, FadeToDeck2_LoadOnDeck1_TrackLoadSuccess) {
     // Indicate the track loaded successfully.
     deck1.fakeTrackLoadedEvent(pTrack);
 
-    PlaylistTableModel* pAutoDJTableModel = pProcessor->getTableModel();
+    StemsMixTableModel* pAutoDJTableModel = pProcessor->getTableModel();
     // The first track is loaded into deck 2 and the second track is loaded into
     // deck 1 after we fade to deck 2.
     pAutoDJTableModel->appendTrack(testId);
@@ -1290,7 +1290,7 @@ TEST_F(AutoDJProcessorTest, FadeToDeck2_LoadOnDeck1_TrackLoadFailed) {
     // Indicate the track loaded successfully.
     deck1.fakeTrackLoadedEvent(pTrack);
 
-    PlaylistTableModel* pAutoDJTableModel = pProcessor->getTableModel();
+    StemsMixTableModel* pAutoDJTableModel = pProcessor->getTableModel();
     // The first track is loaded into deck 2, the second track is loaded into
     // deck 1 (fails) after we fade to deck 2, and the third is loaded into deck
     // 1 (succeeds).
@@ -1396,7 +1396,7 @@ TEST_F(AutoDJProcessorTest, FadeToDeck2_Long_Transition) {
     // Indicate the track loaded successfully.
     deck1.fakeTrackLoadedEvent(pTrack);
 
-    PlaylistTableModel* pAutoDJTableModel = pProcessor->getTableModel();
+    StemsMixTableModel* pAutoDJTableModel = pProcessor->getTableModel();
     pAutoDJTableModel->appendTrack(testId);
 
     EXPECT_CALL(*pProcessor, emitAutoDJStateChanged(AutoDJProcessor::ADJ_IDLE));
@@ -1485,7 +1485,7 @@ TEST_F(AutoDJProcessorTest, FadeToDeck2_Pause_Transition) {
     // Indicate the track loaded successfully.
     deck1.fakeTrackLoadedEvent(pTrack);
 
-    PlaylistTableModel* pAutoDJTableModel = pProcessor->getTableModel();
+    StemsMixTableModel* pAutoDJTableModel = pProcessor->getTableModel();
     pAutoDJTableModel->appendTrack(testId);
 
     EXPECT_CALL(*pProcessor, emitLoadTrackToPlayer(_, QString("[Channel2]"), false));
@@ -1565,7 +1565,7 @@ TEST_F(AutoDJProcessorTest, FadeToDeck2_SeekEnd) {
     // Indicate the track loaded successfully.
     deck1.fakeTrackLoadedEvent(pTrack);
 
-    PlaylistTableModel* pAutoDJTableModel = pProcessor->getTableModel();
+    StemsMixTableModel* pAutoDJTableModel = pProcessor->getTableModel();
     pAutoDJTableModel->appendTrack(testId);
 
     EXPECT_CALL(*pProcessor, emitAutoDJStateChanged(AutoDJProcessor::ADJ_IDLE));
@@ -1617,7 +1617,7 @@ TEST_F(AutoDJProcessorTest, FadeToDeck2_SeekBeforeTransition) {
     // Indicate the track loaded successfully.
     deck1.fakeTrackLoadedEvent(pTrack);
 
-    PlaylistTableModel* pAutoDJTableModel = pProcessor->getTableModel();
+    StemsMixTableModel* pAutoDJTableModel = pProcessor->getTableModel();
     pAutoDJTableModel->appendTrack(testId);
 
     EXPECT_CALL(*pProcessor, emitAutoDJStateChanged(AutoDJProcessor::ADJ_IDLE));
@@ -1662,7 +1662,7 @@ TEST_F(AutoDJProcessorTest, TrackZeroLength) {
     TrackId testId = addTrackToCollection(kTrackLocationTest);
     ASSERT_TRUE(testId.isValid());
 
-    PlaylistTableModel* pAutoDJTableModel = pProcessor->getTableModel();
+    StemsMixTableModel* pAutoDJTableModel = pProcessor->getTableModel();
     // Need two tracks -- one to be loaded in the left deck and one to load in
     // the right deck.
     pAutoDJTableModel->appendTrack(testId);

@@ -155,22 +155,6 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButtonShuffle">
-        <property name="focusPolicy">
-         <enum>Qt::NoFocus</enum>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="checkable">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QPushButton" name="pushButtonAddRandomTrack">
         <property name="focusPolicy">
          <enum>Qt::NoFocus</enum>
@@ -184,7 +168,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButtonRepeatPlaylist">
+       <widget class="QPushButton" name="pushButtonRepeatStemsMix">
         <property name="focusPolicy">
          <enum>Qt::NoFocus</enum>
         </property>

@@ -30,17 +30,17 @@ const QString kViewName = QStringLiteral("Auto DJ");
 namespace {
 constexpr int kMaxRetrieveAttempts = 3;
 
-    int findOrCrateAutoDjPlaylistId(PlaylistDAO& playlistDAO) {
-        int playlistId = playlistDAO.getPlaylistIdFromName(AUTODJ_TABLE);
-        // If the AutoDJ playlist does not exist yet then create it.
-        if (playlistId < 0) {
-            playlistId = playlistDAO.createPlaylist(
-                    AUTODJ_TABLE, PlaylistDAO::PLHT_AUTO_DJ);
-            VERIFY_OR_DEBUG_ASSERT(playlistId >= 0) {
-                qWarning() << "Failed to create Auto DJ playlist!";
+    int findOrCrateAutoDjStemsMixId(StemsMixDAO& stemsmixDAO) {
+        int stemsmixId = stemsmixDAO.getStemsMixIdFromName(AUTODJ_TABLE);
+        // If the AutoDJ stemsmix does not exist yet then create it.
+        if (stemsmixId < 0) {
+            stemsmixId = stemsmixDAO.createStemsMix(
+                    AUTODJ_TABLE, StemsMixDAO::PLHT_AUTO_DJ);
+            VERIFY_OR_DEBUG_ASSERT(stemsmixId >= 0) {
+                qWarning() << "Failed to create Auto DJ stemsmix!";
             }
         }
-        return playlistId;
+        return stemsmixId;
     }
 } // anonymous namespace
 
@@ -49,18 +49,18 @@ AutoDJFeature::AutoDJFeature(Library* pLibrary,
         PlayerManagerInterface* pPlayerManager)
         : LibraryFeature(pLibrary, pConfig, QStringLiteral("autodj")),
           m_pTrackCollection(pLibrary->trackCollectionManager()->internalCollection()),
-          m_playlistDao(m_pTrackCollection->getPlaylistDAO()),
-          m_iAutoDJPlaylistId(findOrCrateAutoDjPlaylistId(m_playlistDao)),
+          m_stemsmixDao(m_pTrackCollection->getStemsMixDAO()),
+          m_iAutoDJStemsMixId(findOrCrateAutoDjStemsMixId(m_stemsmixDao)),
           m_pAutoDJProcessor(nullptr),
           m_pSidebarModel(make_parented<TreeItemModel>(this)),
           m_pAutoDJView(nullptr),
-          m_autoDjCratesDao(m_iAutoDJPlaylistId, pLibrary->trackCollectionManager(), m_pConfig) {
+          m_autoDjCratesDao(m_iAutoDJStemsMixId, pLibrary->trackCollectionManager(), m_pConfig) {
     qRegisterMetaType<AutoDJProcessor::AutoDJState>("AutoDJState");
     m_pAutoDJProcessor = new AutoDJProcessor(this,
             m_pConfig,
             pPlayerManager,
             pLibrary->trackCollectionManager(),
-            m_iAutoDJPlaylistId);
+            m_iAutoDJStemsMixId);
 
     // Connect loadTrackToPlayer signal as a queued connection to make sure all callbacks of a
     // previous load attempt have been called (lp1941743)
@@ -70,7 +70,7 @@ AutoDJFeature::AutoDJFeature(Library* pLibrary,
             &LibraryFeature::loadTrackToPlayer,
             Qt::QueuedConnection);
 
-    m_playlistDao.setAutoDJProcessor(m_pAutoDJProcessor);
+    m_stemsmixDao.setAutoDJProcessor(m_pAutoDJProcessor);
 
     // Create the "Crates" tree-item under the root item.
     std::unique_ptr<TreeItem> pRootItem = TreeItem::newRoot(this);
@@ -168,7 +168,7 @@ void AutoDJFeature::activate() {
 bool AutoDJFeature::dropAccept(const QList<QUrl>& urls, QObject* pSource) {
     // If a track is dropped onto the Auto DJ tree node, but the track isn't in the
     // library, then add the track to the library before adding it to the
-    // Auto DJ playlist.
+    // Auto DJ stemsmix.
     // pSource != nullptr it is a drop from inside Mixxx and indicates all
     // tracks already in the DB
     QList<TrackId> trackIds = m_pLibrary->trackCollectionManager()->resolveTrackIdsFromUrls(urls,
@@ -177,8 +177,8 @@ bool AutoDJFeature::dropAccept(const QList<QUrl>& urls, QObject* pSource) {
         return false;
     }
 
-    // Return whether appendTracksToPlaylist succeeded.
-    return m_playlistDao.appendTracksToPlaylist(trackIds, m_iAutoDJPlaylistId);
+    // Return whether appendTracksToStemsMix succeeded.
+    return m_stemsmixDao.appendTracksToStemsMix(trackIds, m_iAutoDJStemsMixId);
 }
 
 bool AutoDJFeature::dragMoveAccept(const QUrl& url) {
@@ -233,8 +233,12 @@ void AutoDJFeature::slotCrateChanged(CrateId crateId) {
     }
 }
 
+void AutoDJFeature::slotAddStem(TrackId stemTrackId, QList<int> bars) {
+    
+}
+
 void AutoDJFeature::slotAddRandomTrack() {
-    if (m_iAutoDJPlaylistId >= 0) {
+    if (m_iAutoDJStemsMixId >= 0) {
         TrackPointer pRandomTrack;
         for (int failedRetrieveAttempts = 0;
                 !pRandomTrack && (failedRetrieveAttempts < 2 * kMaxRetrieveAttempts); // 2 rounds
@@ -243,7 +247,7 @@ void AutoDJFeature::slotAddRandomTrack() {
             if (m_crateList.isEmpty()) {
                 // Fetch Track from Library since we have no assigned crates
                 randomTrackId = m_autoDjCratesDao.getRandomTrackIdFromLibrary(
-                        m_iAutoDJPlaylistId);
+                        m_iAutoDJStemsMixId);
             } else {
                 // Fetch track from crates.
                 // We do not fall back to Library if this fails because this
@@ -267,8 +271,8 @@ void AutoDJFeature::slotAddRandomTrack() {
             }
         }
         if (pRandomTrack) {
-            m_pTrackCollection->getPlaylistDAO().appendTrackToPlaylist(
-                    pRandomTrack->getId(), m_iAutoDJPlaylistId);
+            m_pTrackCollection->getStemsMixDAO().appendTrackToStemsMix(
+                    pRandomTrack->getId(), m_iAutoDJStemsMixId);
             m_pAutoDJView->onShow();
             return; // success
         }

@@ -113,22 +113,17 @@ AutoDJProcessor::AutoDJProcessor(
         UserSettingsPointer pConfig,
         PlayerManagerInterface* pPlayerManager,
         TrackCollectionManager* pTrackCollectionManager,
-        int iAutoDJPlaylistId)
+        int iAutoDJStemsMixId)
         : QObject(pParent),
           m_pConfig(pConfig),
           m_pAutoDJTableModel(nullptr),
           m_eState(ADJ_DISABLED),
           m_transitionProgress(0.0),
           m_transitionTime(kTransitionPreferenceDefault) {
-    m_pAutoDJTableModel = new PlaylistTableModel(this, pTrackCollectionManager,
+    m_pAutoDJTableModel = new StemsMixTableModel(this, pTrackCollectionManager,
                                                  "mixxx.db.model.autodj");
-    m_pAutoDJTableModel->setTableModel(iAutoDJPlaylistId);
+    m_pAutoDJTableModel->setTableModel(iAutoDJStemsMixId);
     m_pAutoDJTableModel->select();
-
-    m_pShufflePlaylist = new ControlPushButton(
-            ConfigKey("[AutoDJ]", "shuffle_playlist"));
-    connect(m_pShufflePlaylist, &ControlPushButton::valueChanged,
-            this, &AutoDJProcessor::controlShuffle);
 
     m_pSkipNext = new ControlPushButton(
             ConfigKey("[AutoDJ]", "skip_next"));
@@ -190,7 +185,6 @@ AutoDJProcessor::~AutoDJProcessor() {
 
     delete m_pSkipNext;
     delete m_pAddRandomTrack;
-    delete m_pShufflePlaylist;
     delete m_pEnabledAutoDJ;
     delete m_pFadeNow;
 
@@ -209,16 +203,6 @@ void AutoDJProcessor::setCrossfader(double value) {
         value *= -1.0;
     }
     m_pCOCrossfader->set(value);
-}
-
-AutoDJProcessor::AutoDJError AutoDJProcessor::shufflePlaylist(
-        const QModelIndexList& selectedIndices) {
-    QModelIndex exclude;
-    if (m_eState != ADJ_DISABLED) {
-        exclude = m_pAutoDJTableModel->index(0, 0);
-    }
-    m_pAutoDJTableModel->shuffleTracks(selectedIndices, exclude);
-    return ADJ_OK;
 }
 
 void AutoDJProcessor::fadeNow() {
@@ -357,12 +341,12 @@ AutoDJProcessor::AutoDJError AutoDJProcessor::skipNext() {
         removeLoadedTrackFromTopOfQueue(*pRightDeck);
         loadNextTrackFromQueue(*pRightDeck);
     } else {
-        // If both decks are playing remove next track in playlist
+        // If both decks are playing remove next track in stemsmix
         TrackId nextId = m_pAutoDJTableModel->getTrackId(m_pAutoDJTableModel->index(0, 0));
         TrackId leftId = pLeftDeck->getLoadedTrack()->getId();
         TrackId rightId = pRightDeck->getLoadedTrack()->getId();
         if (nextId == leftId || nextId == rightId) {
-        // One of the playing tracks is still on top of playlist, remove second item
+        // One of the playing tracks is still on top of stemsmix, remove second item
             m_pAutoDJTableModel->removeTrack(m_pAutoDJTableModel->index(1, 0));
         } else {
             m_pAutoDJTableModel->removeTrack(m_pAutoDJTableModel->index(0, 0));
@@ -587,12 +571,6 @@ void AutoDJProcessor::controlEnable(double value) {
 void AutoDJProcessor::controlFadeNow(double value) {
     if (value > 0.0) {
         fadeNow();
-    }
-}
-
-void AutoDJProcessor::controlShuffle(double value) {
-    if (value > 0.0) {
-        shufflePlaylist(QModelIndexList());
     }
 }
 
@@ -871,7 +849,7 @@ void AutoDJProcessor::playerPositionChanged(DeckAttributes* pAttributes,
 }
 
 TrackPointer AutoDJProcessor::getNextTrackFromQueue() {
-    // Get the track at the top of the playlist.
+    // Get the track at the top of the stemsmix.
     bool randomQueueEnabled = m_pConfig->getValue<bool>(
             ConfigKey("[Auto DJ]", "EnableRandomQueue"));
     int minAutoDJCrateTracks = m_pConfig->getValueString(
@@ -890,7 +868,7 @@ TrackPointer AutoDJProcessor::getNextTrackFromQueue() {
             if (nextTrack->getFileInfo().checkFileExists()) {
                 return nextTrack;
             } else {
-                // Remove missing song from auto DJ playlist.
+                // Remove missing song from auto DJ stemsmix.
                 m_pAutoDJTableModel->removeTrack(
                         m_pAutoDJTableModel->index(0, 0));
             }
@@ -935,7 +913,7 @@ bool AutoDJProcessor::removeTrackFromTopOfQueue(TrackPointer pTrack) {
         return false;
     }
 
-    // Get the track id at the top of the playlist.
+    // Get the track id at the top of the stemsmix.
     TrackId nextId(m_pAutoDJTableModel->getTrackId(
             m_pAutoDJTableModel->index(0, 0)));
 

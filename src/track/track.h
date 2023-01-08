@@ -586,6 +586,21 @@ class Track : public QObject {
     mixxx::BeatsImporterPointer m_pBeatsImporterPending;
     mixxx::CueInfoImporterPointer m_pCueInfoImporterPending;
 
+
+    // If this track is a stem, points to track of which this is a stem
+    TrackPointer m_parent;
+
+
+    // If this is a proper track, optionally points to stems
+    TrackPointer m_vocals;
+
+    TrackPointer m_other;
+
+    TrackPointer m_bass;
+
+    TrackPointer m_drums;
+
+
     friend class TrackDAO;
     void setHeaderParsedFromTrackDAO(bool headerParsed) {
         // Always operating on a newly created, exclusive instance! No need

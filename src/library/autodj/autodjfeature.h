@@ -11,6 +11,7 @@
 #include <QVariant>
 
 #include "library/dao/autodjcratesdao.h"
+#include "library/dao/stemsmixdao.h"
 #include "library/libraryfeature.h"
 #include "library/trackset/crate/crate.h"
 #include "library/treeitemmodel.h"
@@ -57,9 +58,9 @@ class AutoDJFeature : public LibraryFeature {
   private:
     TrackCollection* const m_pTrackCollection;
 
-    PlaylistDAO& m_playlistDao;
-    // The id of the AutoDJ playlist.
-    int m_iAutoDJPlaylistId;
+    StemsMixDAO& m_stemsmixDao;
+    // The id of the AutoDJ stemsmix.
+    int m_iAutoDJStemsMixId;
     AutoDJProcessor* m_pAutoDJProcessor;
     parented_ptr<TreeItemModel> m_pSidebarModel;
     DlgAutoDJ* m_pAutoDJView;
@@ -93,10 +94,12 @@ class AutoDJFeature : public LibraryFeature {
 
     void slotCrateChanged(CrateId crateId);
 
+    void slotAddStem(TrackId stemTrackId, QList<int> bars);
+
     // Adds a random track from all loaded crates to the auto-DJ queue.
     void slotAddRandomTrack();
 
     // Adds a random track from the queue upon hitting minimum number
-    // of tracks in the playlist
+    // of tracks in the stemsmix
     void slotRandomQueue(int numTracksToAdd);
 };

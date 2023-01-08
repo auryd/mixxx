@@ -154,6 +154,19 @@ void WMainMenuBar::initialize() {
 
     pLibraryMenu->addSeparator();
 
+    QString createStemsMixTitle = tr("Create &New Stems Mix");
+    QString createStemsMixText = tr("Create a new stems mix");
+    auto* pLibraryCreateStemsMix = new QAction(createStemsMixTitle, this);
+    pLibraryCreateStemsMix->setShortcut(
+            QKeySequence(m_pKbdConfig->getValue(
+                    ConfigKey("[KeyboardShortcuts]", "LibraryMenu_NewStemsMix"),
+                    tr("Ctrl+n"))));
+    pLibraryCreateStemsMix->setShortcutContext(Qt::ApplicationShortcut);
+    pLibraryCreateStemsMix->setStatusTip(createStemsMixText);
+    pLibraryCreateStemsMix->setWhatsThis(buildWhatsThis(createStemsMixTitle, createStemsMixText));
+    connect(pLibraryCreateStemsMix, &QAction::triggered, this, &WMainMenuBar::createStemsMix);
+    pLibraryMenu->addAction(pLibraryCreateStemsMix);
+
     QString createPlaylistTitle = tr("Create &New Playlist");
     QString createPlaylistText = tr("Create a new playlist");
     auto* pLibraryCreatePlaylist = new QAction(createPlaylistTitle, this);

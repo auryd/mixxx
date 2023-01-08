@@ -7,7 +7,7 @@
 #include "control/controlproxy.h"
 #include "engine/channels/enginechannel.h"
 #include "engine/controls/cuecontrol.h"
-#include "library/playlisttablemodel.h"
+#include "library/autodj/stemsmixtablemodel.h"
 #include "preferences/usersettings.h"
 #include "track/track_decl.h"
 #include "util/class.h"
@@ -170,7 +170,7 @@ class AutoDJProcessor : public QObject {
                     UserSettingsPointer pConfig,
                     PlayerManagerInterface* pPlayerManager,
                     TrackCollectionManager* pTrackCollectionManager,
-                    int iAutoDJPlaylistId);
+                    int iAutoDJStemsMixId);
     virtual ~AutoDJProcessor();
 
     AutoDJState getState() const {
@@ -185,7 +185,7 @@ class AutoDJProcessor : public QObject {
         return m_transitionMode;
     }
 
-    PlaylistTableModel* getTableModel() const {
+    StemsMixTableModel* getTableModel() const {
         return m_pAutoDJTableModel;
     }
 
@@ -195,7 +195,6 @@ class AutoDJProcessor : public QObject {
 
     void setTransitionMode(TransitionMode newMode);
 
-    AutoDJError shufflePlaylist(const QModelIndexList& selectedIndices);
     AutoDJError skipNext();
     void fadeNow();
     AutoDJError toggleAutoDJ(bool enable);
@@ -221,7 +220,6 @@ class AutoDJProcessor : public QObject {
 
     void controlEnable(double value);
     void controlFadeNow(double value);
-    void controlShuffle(double value);
     void controlSkipNext(double value);
     void controlAddRandomTrack(double value);
 
@@ -278,7 +276,7 @@ class AutoDJProcessor : public QObject {
     bool removeTrackFromTopOfQueue(TrackPointer pTrack);
     void maybeFillRandomTracks();
     UserSettingsPointer m_pConfig;
-    PlaylistTableModel* m_pAutoDJTableModel;
+    StemsMixTableModel* m_pAutoDJTableModel;
 
     AutoDJState m_eState;
     double m_transitionProgress;
@@ -293,7 +291,6 @@ class AutoDJProcessor : public QObject {
     ControlPushButton* m_pSkipNext;
     ControlPushButton* m_pAddRandomTrack;
     ControlPushButton* m_pFadeNow;
-    ControlPushButton* m_pShufflePlaylist;
     ControlPushButton* m_pEnabledAutoDJ;
 
     DISALLOW_COPY_AND_ASSIGN(AutoDJProcessor);

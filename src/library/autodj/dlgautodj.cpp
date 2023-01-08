@@ -3,7 +3,7 @@
 #include <QApplication>
 #include <QMessageBox>
 
-#include "library/playlisttablemodel.h"
+#include "library/autodj/stemsmixtablemodel.h"
 #include "library/trackcollectionmanager.h"
 #include "moc_dlgautodj.cpp"
 #include "track/track.h"
@@ -14,7 +14,7 @@
 
 namespace {
 const char* kPreferenceGroupName = "[Auto DJ]";
-const char* kRepeatPlaylistPreference = "Requeue";
+const char* kRepeatStemsMixPreference = "Requeue";
 } // anonymous namespace
 
 DlgAutoDJ::DlgAutoDJ(WLibrary* parent,
@@ -89,7 +89,6 @@ DlgAutoDJ::DlgAutoDJ(WLibrary* parent,
 
     setupActionButton(pushButtonFadeNow, &DlgAutoDJ::fadeNowButton, tr("Fade"));
     setupActionButton(pushButtonSkipNext, &DlgAutoDJ::skipNextButton, tr("Skip"));
-    setupActionButton(pushButtonShuffle, &DlgAutoDJ::shufflePlaylistButton, tr("Shuffle"));
     setupActionButton(pushButtonAddRandomTrack, &DlgAutoDJ::addRandomTrackButton, tr("Random"));
 
     m_enableBtnTooltip = tr(
@@ -108,15 +107,11 @@ DlgAutoDJ::DlgAutoDJ(WLibrary* parent,
             "Skip the next track in the Auto DJ queue\n"
             "\n"
             "Shortcut: Shift+F10");
-    QString shuffleBtnTooltip = tr(
-            "Shuffle the content of the Auto DJ queue\n"
-            "\n"
-            "Shortcut: Shift+F9");
     QString addRandomTrackBtnTooltip = tr(
             "Adds a random track from track sources (crates) to the Auto DJ queue.\n"
             "If no track sources are configured, the track is added from the library instead.");
     QString repeatBtnTooltip = tr(
-            "Repeat the playlist");
+            "Repeat the stemsmix");
     QString spinBoxTransitionTooltip = tr(
             "Determines the duration of the transition");
     QString labelTransitionTooltip = tr(
@@ -148,9 +143,8 @@ DlgAutoDJ::DlgAutoDJ(WLibrary* parent,
 
     pushButtonFadeNow->setToolTip(fadeBtnTooltip);
     pushButtonSkipNext->setToolTip(skipBtnTooltip);
-    pushButtonShuffle->setToolTip(shuffleBtnTooltip);
     pushButtonAddRandomTrack->setToolTip(addRandomTrackBtnTooltip);
-    pushButtonRepeatPlaylist->setToolTip(repeatBtnTooltip);
+    pushButtonRepeatStemsMix->setToolTip(repeatBtnTooltip);
     spinBoxTransition->setToolTip(spinBoxTransitionTooltip);
     labelTransitionAppendix->setToolTip(labelTransitionTooltip);
     fadeModeCombobox->setToolTip(fadeModeTooltip);
@@ -184,17 +178,17 @@ DlgAutoDJ::DlgAutoDJ(WLibrary* parent,
             this,
             &DlgAutoDJ::slotTransitionModeChanged);
 
-    connect(pushButtonRepeatPlaylist,
+    connect(pushButtonRepeatStemsMix,
             &QPushButton::clicked,
             this,
-            &DlgAutoDJ::slotRepeatPlaylistChanged);
+            &DlgAutoDJ::slotRepeatStemsMixChanged);
     if (m_bShowButtonText) {
-        pushButtonRepeatPlaylist->setText(tr("Repeat"));
+        pushButtonRepeatStemsMix->setText(tr("Repeat"));
     }
-    bool repeatPlaylist = m_pConfig->getValue<bool>(
-            ConfigKey(kPreferenceGroupName, kRepeatPlaylistPreference));
-    pushButtonRepeatPlaylist->setChecked(repeatPlaylist);
-    slotRepeatPlaylistChanged(repeatPlaylist);
+    bool repeatStemsMix = m_pConfig->getValue<bool>(
+            ConfigKey(kPreferenceGroupName, kRepeatStemsMixPreference));
+    pushButtonRepeatStemsMix->setChecked(repeatStemsMix);
+    slotRepeatStemsMixChanged(repeatStemsMix);
 
     // Setup DlgAutoDJ UI based on the current AutoDJProcessor state. Keep in
     // mind that AutoDJ may already be active when DlgAutoDJ is created (due to
@@ -236,7 +230,7 @@ void DlgAutoDJ::onShow() {
 }
 
 void DlgAutoDJ::onSearch(const QString& text) {
-    // Do not allow filtering the Auto DJ playlist, because
+    // Do not allow filtering the Auto DJ stemsmix, because
     // Auto DJ will work from the filtered table
     Q_UNUSED(text);
 }
@@ -251,13 +245,6 @@ void DlgAutoDJ::loadSelectedTrackToGroup(const QString& group, bool play) {
 
 void DlgAutoDJ::moveSelection(int delta) {
     m_pTrackTableView->moveSelection(delta);
-}
-
-void DlgAutoDJ::shufflePlaylistButton(bool) {
-    QModelIndexList indexList = m_pTrackTableView->selectionModel()->selectedRows();
-
-    // Activate regardless of button being checked
-    m_pAutoDJProcessor->shufflePlaylist(indexList);
 }
 
 void DlgAutoDJ::skipNextButton(bool) {
@@ -340,9 +327,9 @@ void DlgAutoDJ::slotTransitionModeChanged(int newIndex) {
     setFocus();
 }
 
-void DlgAutoDJ::slotRepeatPlaylistChanged(int checkState) {
+void DlgAutoDJ::slotRepeatStemsMixChanged(int checkState) {
     bool checked = static_cast<bool>(checkState);
-    m_pConfig->setValue(ConfigKey(kPreferenceGroupName, kRepeatPlaylistPreference),
+    m_pConfig->setValue(ConfigKey(kPreferenceGroupName, kRepeatStemsMixPreference),
             checked);
 }
 

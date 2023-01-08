@@ -32,6 +32,7 @@
 #include "library/trackmodel.h"
 #include "library/trackset/crate/cratefeature.h"
 #include "library/trackset/playlistfeature.h"
+#include "library/autodj/stemsmixfeature.h"
 #include "library/trackset/setlogfeature.h"
 #include "library/traktor/traktorfeature.h"
 #include "mixer/playermanager.h"
@@ -76,6 +77,7 @@ Library::Library(
           m_pLibraryControl(make_parented<LibraryControl>(this)),
           m_pLibraryWidget(nullptr),
           m_pMixxxLibraryFeature(nullptr),
+          m_pStemsMixFeature(nullptr),
           m_pPlaylistFeature(nullptr),
           m_pCrateFeature(nullptr),
           m_pAnalysisFeature(nullptr) {
@@ -104,6 +106,9 @@ Library::Library(
 #endif
 
     addFeature(new AutoDJFeature(this, m_pConfig, pPlayerManager));
+
+    m_pStemsMixFeature = new StemsMixFeature(this, UserSettingsPointer(m_pConfig));
+    addFeature(m_pStemsMixFeature);
 
     m_pPlaylistFeature = new PlaylistFeature(this, UserSettingsPointer(m_pConfig));
     addFeature(m_pPlaylistFeature);
@@ -144,6 +149,10 @@ Library::Library(
     addFeature(new SetlogFeature(this, UserSettingsPointer(m_pConfig)));
 
     m_pAnalysisFeature = new AnalysisFeature(this, m_pConfig);
+    connect(m_pStemsMixFeature,
+            &StemsMixFeature::analyzeTracks,
+            m_pAnalysisFeature,
+            &AnalysisFeature::analyzeTracks);
     connect(m_pPlaylistFeature,
             &PlaylistFeature::analyzeTracks,
             m_pAnalysisFeature,
@@ -549,6 +558,10 @@ void Library::slotLoadTrackToPlayer(
 void Library::slotRefreshLibraryModels() {
     m_pMixxxLibraryFeature->refreshLibraryModels();
     m_pAnalysisFeature->refreshLibraryModels();
+}
+
+void Library::slotCreateStemsMix() {
+    m_pStemsMixFeature->slotCreateStemsMix();
 }
 
 void Library::slotCreatePlaylist() {

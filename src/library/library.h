@@ -31,6 +31,7 @@ class PlayerManager;
 class PlaylistFeature;
 class RecordingManager;
 class SidebarModel;
+class StemsMixFeature;
 class TrackCollection;
 class TrackCollectionManager;
 class TrackModel;
@@ -113,6 +114,7 @@ class Library: public QObject {
     void slotLoadTrackToPlayer(TrackPointer pTrack, const QString& group, bool play);
     void slotLoadLocationToPlayer(const QString& location, const QString& group, bool play);
     void slotRefreshLibraryModels();
+    void slotCreateStemsMix();
     void slotCreatePlaylist();
     void slotCreateCrate();
     void slotRequestAddDir(const QString& directory);
@@ -164,6 +166,7 @@ class Library: public QObject {
     const static QString m_sAutoDJViewName;
     WLibrary* m_pLibraryWidget;
     MixxxLibraryFeature* m_pMixxxLibraryFeature;
+    StemsMixFeature* m_pStemsMixFeature;
     PlaylistFeature* m_pPlaylistFeature;
     CrateFeature* m_pCrateFeature;
     AnalysisFeature* m_pAnalysisFeature;
