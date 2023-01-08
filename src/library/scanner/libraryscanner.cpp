@@ -171,6 +171,7 @@ void LibraryScanner::run() {
         m_cueDao.initialize(dbConnection);
         m_trackDao.initialize(dbConnection);
         m_playlistDao.initialize(dbConnection);
+        m_stemsMixDao.initialize(dbConnection);
         m_analysisDao.initialize(dbConnection);
         m_directoryDao.initialize(dbConnection);
 

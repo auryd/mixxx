@@ -42,7 +42,7 @@ StemsMixFeature::StemsMixFeature(Library* pLibrary, UserSettingsPointer pConfig)
                   new StemsMixTableModel(nullptr,
                           pLibrary->trackCollectionManager(),
                           "mixxx.db.model.stemsMix"),
-                  QStringLiteral("PLAYLISTHOME"),
+                  QStringLiteral("STEMSMIXHOME"),
                   QStringLiteral("stemsMix")) {
     // construct child model
     std::unique_ptr<TreeItem> pRootItem = TreeItem::newRoot(this);
@@ -121,7 +121,7 @@ bool StemsMixFeature::dragMoveAcceptChild(const QModelIndex& index, const QUrl& 
     bool locked = m_stemsMixDao.isStemsMixLocked(stemsMixId);
 
     bool formatSupported = SoundSourceProxy::isUrlSupported(url) ||
-            Parser::isStemsMixFilenameSupported(url.toLocalFile());
+            true; //TODO: Parser::isStemsMixFilenameSupported(url.toLocalFile());
     return !locked && formatSupported;
 }
 
@@ -142,7 +142,7 @@ QList<BaseStemsMixFeature::IdAndLabel> StemsMixFeature::createStemsMixLabels() {
             "    when 0 then library.duration else 0 end) AS durationSeconds "
             "FROM StemsMixs "
             "LEFT JOIN StemsMixTracks "
-            "  ON StemsMixTracks.stemsMix_id = StemsMixs.id "
+            "  ON StemsMixTracks.stemsmix_id = StemsMixs.id "
             "LEFT JOIN library "
             "  ON StemsMixTracks.track_id = library.id "
             "  WHERE StemsMixs.hidden = 0 "

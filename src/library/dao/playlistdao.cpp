@@ -110,7 +110,7 @@ int PlaylistDAO::createUniquePlaylist(QString* pName, const HiddenType hidden) {
 }
 
 QString PlaylistDAO::getPlaylistName(const int playlistId) const {
-    //qDebug() << "PlaylistDAO::getPlaylistName" << QThread::currentThread() << m_database.connectionName();
+    qDebug() << "PlaylistDAO::getPlaylistName" << QThread::currentThread() << m_database.connectionName();
 
     QSqlQuery query(m_database);
     query.prepare(QStringLiteral(
@@ -152,7 +152,7 @@ QList<TrackId> PlaylistDAO::getTrackIds(const int playlistId) const {
 }
 
 int PlaylistDAO::getPlaylistIdFromName(const QString& name) const {
-    //qDebug() << "PlaylistDAO::getPlaylistIdFromName" << QThread::currentThread() << m_database.connectionName();
+    qDebug() << "PlaylistDAO::getPlaylistIdFromName" << QThread::currentThread() << m_database.connectionName();
 
     QSqlQuery query(m_database);
     query.prepare(QStringLiteral(
@@ -169,7 +169,7 @@ int PlaylistDAO::getPlaylistIdFromName(const QString& name) const {
 }
 
 void PlaylistDAO::deletePlaylist(const int playlistId) {
-    //qDebug() << "PlaylistDAO::deletePlaylist" << QThread::currentThread() << m_database.connectionName();
+    qDebug() << "PlaylistDAO::deletePlaylist" << QThread::currentThread() << m_database.connectionName();
     ScopedTransaction transaction(m_database);
 
     QSet<TrackId> playedTrackIds;
@@ -340,8 +340,8 @@ bool PlaylistDAO::removeTracksFromPlaylist(int playlistId, int startIndex) {
 }
 
 bool PlaylistDAO::appendTracksToPlaylist(const QList<TrackId>& trackIds, const int playlistId) {
-    // qDebug() << "PlaylistDAO::appendTracksToPlaylist"
-    //          << QThread::currentThread() << m_database.connectionName();
+    qDebug() << "PlaylistDAO::appendTracksToPlaylist"
+             << QThread::currentThread() << m_database.connectionName();
 
     // Start the transaction
     ScopedTransaction transaction(m_database);
@@ -389,7 +389,7 @@ bool PlaylistDAO::appendTrackToPlaylist(TrackId trackId, const int playlistId) {
 
 /** Find out how many playlists exist. */
 unsigned int PlaylistDAO::playlistCount() const {
-    // qDebug() << "PlaylistDAO::playlistCount" << QThread::currentThread() << m_database.connectionName();
+    qDebug() << "PlaylistDAO::playlistCount" << QThread::currentThread() << m_database.connectionName();
     QSqlQuery query(m_database);
     query.prepare(QStringLiteral(
             "SELECT count(*) as count FROM Playlists"));
@@ -405,8 +405,8 @@ unsigned int PlaylistDAO::playlistCount() const {
 }
 
 int PlaylistDAO::getPlaylistId(const int index) const {
-    //qDebug() << "PlaylistDAO::getPlaylistId"
-    //         << QThread::currentThread() << m_database.connectionName();
+    qDebug() << "PlaylistDAO::getPlaylistId"
+            << QThread::currentThread() << m_database.connectionName();
 
     QSqlQuery query(m_database);
     query.prepare(QStringLiteral(
@@ -428,8 +428,8 @@ int PlaylistDAO::getPlaylistId(const int index) const {
 }
 
 PlaylistDAO::HiddenType PlaylistDAO::getHiddenType(const int playlistId) const {
-    // qDebug() << "PlaylistDAO::getHiddenType"
-    //          << QThread::currentThread() << m_database.connectionName();
+    qDebug() << "PlaylistDAO::getHiddenType"
+             << QThread::currentThread() << m_database.connectionName();
 
     QSqlQuery query(m_database);
     query.prepare(QStringLiteral(

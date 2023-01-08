@@ -55,17 +55,17 @@ QStringList LibraryFeature::getPlaylistFiles(QFileDialog::FileMode mode) const {
 bool LibraryFeature::exportPlaylistItemsIntoFile(
         QString playlistFilePath,
         const QList<QString>& playlistItemLocations,
-        bool useRelativePath)    {
+        bool useRelativePath) {
     if (playlistFilePath.endsWith(
-            QStringLiteral(".pls"),
-            Qt::CaseInsensitive)) {
+                QStringLiteral(".pls"),
+                Qt::CaseInsensitive)) {
         return ParserPls::writePLSFile(
                 playlistFilePath,
                 playlistItemLocations,
                 useRelativePath);
     } else if (playlistFilePath.endsWith(
-            QStringLiteral(".m3u8"),
-            Qt::CaseInsensitive)) {
+                       QStringLiteral(".m3u8"),
+                       Qt::CaseInsensitive)) {
         return ParserM3u::writeM3U8File(
                 playlistFilePath,
                 playlistItemLocations,
@@ -73,8 +73,8 @@ bool LibraryFeature::exportPlaylistItemsIntoFile(
     } else {
         //default export to M3U if file extension is missing
         if (!playlistFilePath.endsWith(
-                QStringLiteral(".m3u"),
-                Qt::CaseInsensitive)) {
+                    QStringLiteral(".m3u"),
+                    Qt::CaseInsensitive)) {
             kLogger.debug()
                     << "No valid file extension for playlist export specified."
                     << "Appending .m3u and exporting to M3U.";
@@ -95,6 +95,73 @@ bool LibraryFeature::exportPlaylistItemsIntoFile(
         return ParserM3u::writeM3UFile(
                 playlistFilePath,
                 playlistItemLocations,
+                useRelativePath);
+    }
+}
+
+QStringList LibraryFeature::getStemsMixFiles(QFileDialog::FileMode mode) const {
+    QString laststemsMixDirectory = m_pConfig->getValue(
+            ConfigKey("[Library]", "LastImportExportstemsMixDirectory"),
+            QStandardPaths::writableLocation(QStandardPaths::MusicLocation));
+
+    QFileDialog dialog(nullptr,
+            tr("Import stemsMix"),
+            laststemsMixDirectory,
+            tr("stemsMix Files (*.m3u *.m3u8 *.pls *.csv)"));
+    dialog.setAcceptMode(QFileDialog::AcceptOpen);
+    dialog.setFileMode(mode);
+    dialog.setModal(true);
+
+    // If the user refuses return
+    if (!dialog.exec()) {
+        return QStringList();
+    }
+    return dialog.selectedFiles();
+}
+
+bool LibraryFeature::exportStemsMixItemsIntoFile(
+        QString stemsMixFilePath,
+        const QList<QString>& stemsMixItemLocations,
+        bool useRelativePath) {
+    if (stemsMixFilePath.endsWith(
+                QStringLiteral(".pls"),
+                Qt::CaseInsensitive)) {
+        return ParserPls::writePLSFile(
+                stemsMixFilePath,
+                stemsMixItemLocations,
+                useRelativePath);
+    } else if (stemsMixFilePath.endsWith(
+                       QStringLiteral(".m3u8"),
+                       Qt::CaseInsensitive)) {
+        return ParserM3u::writeM3U8File(
+                stemsMixFilePath,
+                stemsMixItemLocations,
+                useRelativePath);
+    } else {
+        //default export to M3U if file extension is missing
+        if (!stemsMixFilePath.endsWith(
+                    QStringLiteral(".m3u"),
+                    Qt::CaseInsensitive)) {
+            kLogger.debug()
+                    << "No valid file extension for stemsMix export specified."
+                    << "Appending .m3u and exporting to M3U.";
+            stemsMixFilePath.append(QStringLiteral(".m3u"));
+            if (QFileInfo::exists(stemsMixFilePath)) {
+                auto overwrite = QMessageBox::question(
+                        nullptr,
+                        tr("Overwrite File?"),
+                        tr("A stemsMix file with the name \"%1\" already exists.\n"
+                           "The default \"m3u\" extension was added because none was specified.\n\n"
+                           "Do you really want to overwrite it?")
+                                .arg(stemsMixFilePath));
+                if (overwrite != QMessageBox::StandardButton::Yes) {
+                    return false;
+                }
+            }
+        }
+        return ParserM3u::writeM3UFile(
+                stemsMixFilePath,
+                stemsMixItemLocations,
                 useRelativePath);
     }
 }

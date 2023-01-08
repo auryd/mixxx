@@ -14,6 +14,7 @@
 #include "library/dao/directorydao.h"
 #include "library/dao/libraryhashdao.h"
 #include "library/dao/playlistdao.h"
+#include "library/dao/stemsmixdao.h"
 #include "library/dao/trackdao.h"
 #include "library/scanner/scannerglobal.h"
 #include "track/track_decl.h"
@@ -105,6 +106,7 @@ class LibraryScanner : public QThread {
     LibraryHashDAO m_libraryHashDao;
     CueDAO m_cueDao;
     PlaylistDAO m_playlistDao;
+    StemsMixDAO m_stemsMixDao;
     DirectoryDAO m_directoryDao;
     AnalysisDao m_analysisDao;
     TrackDAO m_trackDao;

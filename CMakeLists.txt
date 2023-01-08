@@ -692,6 +692,9 @@ add_library(mixxx-lib STATIC EXCLUDE_FROM_ALL
   src/library/analysislibrarytablemodel.cpp
   src/library/autodj/autodjfeature.cpp
   src/library/autodj/autodjprocessor.cpp
+  src/library/autodj/basestemsmixfeature.cpp
+  src/library/autodj/stemsmixfeature.cpp
+  src/library/autodj/stemsmixtablemodel.cpp
   src/library/autodj/dlgautodj.cpp
   src/library/autodj/dlgautodj.ui
   src/library/banshee/bansheedbconnection.cpp
@@ -721,6 +724,7 @@ add_library(mixxx-lib STATIC EXCLUDE_FROM_ALL
   src/library/dao/libraryhashdao.cpp
   src/library/dao/playlistdao.cpp
   src/library/dao/settingsdao.cpp
+  src/library/dao/stemsmixdao.cpp
   src/library/dao/trackdao.cpp
   src/library/dao/trackschema.cpp
   src/library/dlganalysis.cpp

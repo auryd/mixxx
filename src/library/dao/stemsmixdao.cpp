@@ -23,6 +23,7 @@ void StemsMixDAO::initialize(const QSqlDatabase& database) {
 }
 
 void StemsMixDAO::populateStemsMixMembershipCache() {
+    qDebug() << "StemsMixDAO::populateStemsMixMembershipCache" << this << m_database.connectionName();
     // Minor optimization: reserve space in m_stemsmixsTrackIsIn.
     QSqlQuery query(m_database);
     query.prepare(QStringLiteral("SELECT COUNT(*) from " STEMSMIX_TRACKS_TABLE));
@@ -48,10 +49,10 @@ void StemsMixDAO::populateStemsMixMembershipCache() {
 }
 
 int StemsMixDAO::createStemsMix(const QString& name, const HiddenType hidden) {
-    //qDebug() << "StemsMixDAO::createStemsMix"
-    //         << QThread::currentThread()
-    //         << m_database.connectionName();
-    // Start the transaction
+    qDebug() << "StemsMixDAO::createStemsMix"
+             << QThread::currentThread()
+             << m_database.connectionName();
+    //Start the transaction
     ScopedTransaction transaction(m_database);
 
     // Find out the highest position for the existing stemsmixs so we know what
@@ -72,7 +73,7 @@ int StemsMixDAO::createStemsMix(const QString& name, const HiddenType hidden) {
         position++; // Append after the last stemsmix.
     }
 
-    //qDebug() << "Inserting stemsmix" << name << "at position" << position;
+    qDebug() << "Inserting stemsmix" << name << "at position" << position;
 
     query.prepare(QStringLiteral(
             "INSERT INTO StemsMixs (name, position, hidden, date_created, date_modified) "
@@ -110,7 +111,7 @@ int StemsMixDAO::createUniqueStemsMix(QString* pName, const HiddenType hidden) {
 }
 
 QString StemsMixDAO::getStemsMixName(const int stemsmixId) const {
-    //qDebug() << "StemsMixDAO::getStemsMixName" << QThread::currentThread() << m_database.connectionName();
+    qDebug() << "StemsMixDAO::getStemsMixName" << QThread::currentThread() << m_database.connectionName();
 
     QSqlQuery query(m_database);
     query.prepare(QStringLiteral(
@@ -152,7 +153,7 @@ QList<TrackId> StemsMixDAO::getTrackIds(const int stemsmixId) const {
 }
 
 int StemsMixDAO::getStemsMixIdFromName(const QString& name) const {
-    //qDebug() << "StemsMixDAO::getStemsMixIdFromName" << QThread::currentThread() << m_database.connectionName();
+    qDebug() << "StemsMixDAO::getStemsMixIdFromName" << this << m_database.connectionName();
 
     QSqlQuery query(m_database);
     query.prepare(QStringLiteral(
@@ -339,8 +340,8 @@ bool StemsMixDAO::removeTracksFromStemsMix(int stemsmixId, int startIndex) {
 }
 
 bool StemsMixDAO::appendTracksToStemsMix(const QList<TrackId>& trackIds, const int stemsmixId) {
-    // qDebug() << "StemsMixDAO::appendTracksToStemsMix"
-    //          << QThread::currentThread() << m_database.connectionName();
+    qDebug() << "StemsMixDAO::appendTracksToStemsMix"
+             << QThread::currentThread() << m_database.connectionName();
 
     // Start the transaction
     ScopedTransaction transaction(m_database);
@@ -388,7 +389,7 @@ bool StemsMixDAO::appendTrackToStemsMix(TrackId trackId, const int stemsmixId) {
 
 /** Find out how many stemsmixs exist. */
 unsigned int StemsMixDAO::stemsmixCount() const {
-    // qDebug() << "StemsMixDAO::stemsmixCount" << QThread::currentThread() << m_database.connectionName();
+    qDebug() << "StemsMixDAO::stemsmixCount" << QThread::currentThread() << m_database.connectionName();
     QSqlQuery query(m_database);
     query.prepare(QStringLiteral(
             "SELECT count(*) as count FROM StemsMixs"));
@@ -404,8 +405,8 @@ unsigned int StemsMixDAO::stemsmixCount() const {
 }
 
 int StemsMixDAO::getStemsMixId(const int index) const {
-    //qDebug() << "StemsMixDAO::getStemsMixId"
-    //         << QThread::currentThread() << m_database.connectionName();
+    qDebug() << "StemsMixDAO::getStemsMixId"
+             << QThread::currentThread() << m_database.connectionName();
 
     QSqlQuery query(m_database);
     query.prepare(QStringLiteral(

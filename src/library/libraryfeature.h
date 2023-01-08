@@ -95,6 +95,18 @@ class LibraryFeature : public QObject {
         }
     }
 
+    QStringList getStemsMixFiles() const {
+        return getStemsMixFiles(QFileDialog::ExistingFiles);
+    }
+    QString getStemsMixFile() const {
+        const QStringList stemsMixFiles = getStemsMixFiles();
+        if (stemsMixFiles.isEmpty()) {
+            return QString(); // no file chosen
+        } else {
+            return stemsMixFiles.first();
+        }
+    }
+
     Library* const m_pLibrary;
 
     const UserSettingsPointer m_pConfig;
@@ -149,9 +161,14 @@ class LibraryFeature : public QObject {
             QString playlistFilePath,
             const QList<QString>& playlistItemLocations,
             bool useRelativePath);
+    static bool exportStemsMixItemsIntoFile(
+            QString stemsMixFilePath,
+            const QList<QString>& stemsMixItemLocations,
+            bool useRelativePath);
 
   private:
     QStringList getPlaylistFiles(QFileDialog::FileMode mode) const;
+    QStringList getStemsMixFiles(QFileDialog::FileMode mode) const;
 
     QString m_iconName;
     QIcon m_icon;

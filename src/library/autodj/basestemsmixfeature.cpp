@@ -437,7 +437,10 @@ void BaseStemsMixFeature::slotDeleteStemsMix() {
     }
 }
 
+//TODO
 void BaseStemsMixFeature::slotImportStemsMix() {
+    return;
+    /*
     //qDebug() << "slotImportStemsMix() row:" << m_lastRightClickedIndex.data();
     const QString stemsMixFile = getStemsMixFile();
     if (stemsMixFile.isEmpty()) {
@@ -452,6 +455,7 @@ void BaseStemsMixFeature::slotImportStemsMix() {
 
     slotImportStemsMixFile(stemsMixFile);
     activateChild(m_lastRightClickedIndex);
+    */
 }
 
 void BaseStemsMixFeature::slotImportStemsMixFile(const QString& stemsMix_file) {
@@ -568,7 +572,7 @@ void BaseStemsMixFeature::slotExportStemsMix() {
     pStemsMixTableModel->setTableModel(m_pStemsMixTableModel->getStemsMix());
     pStemsMixTableModel->setSort(
             pStemsMixTableModel->fieldIndex(
-                    ColumnCache::COLUMN_PLAYLISTTRACKSTABLE_POSITION),
+                    ColumnCache::COLUMN_STEMSMIXTRACKSTABLE_POSITION),
             Qt::AscendingOrder);
     pStemsMixTableModel->select();
 
@@ -609,7 +613,7 @@ void BaseStemsMixFeature::slotExportTrackFiles() {
     emit saveModelState();
     pStemsMixTableModel->setTableModel(m_pStemsMixTableModel->getStemsMix());
     pStemsMixTableModel->setSort(pStemsMixTableModel->fieldIndex(
-                                         ColumnCache::COLUMN_PLAYLISTTRACKSTABLE_POSITION),
+                                         ColumnCache::COLUMN_STEMSMIXTRACKSTABLE_POSITION),
             Qt::AscendingOrder);
     pStemsMixTableModel->select();
 
