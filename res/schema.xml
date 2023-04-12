@@ -615,4 +615,15 @@ reapplying those migrations.
 		);
 	</sql>
   </revision>
+  <revision version="41" min_compatible="3">
+    <description>
+		Stems Mixs 2
+	</description>
+    <sql>
+		ALTER TABLE StemsMixTracks ADD COLUMN absolute_bar_index;
+		ALTER TABLE StemsMixTracks ADD COLUMN track_bar_index;
+		ALTER TABLE StemsMixTracks ADD COLUMN duration_bars;
+		ALTER TABLE StemsMixTracks ADD COLUMN stem_id;
+	</sql>
+  </revision>
 </schema>

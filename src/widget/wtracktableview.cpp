@@ -236,7 +236,7 @@ void WTrackTableView::loadTrackModel(QAbstractItemModel* model, bool restoreStat
 
         // Show or hide the column based on whether it should be shown or not.
         if (trackModel->isColumnInternal(i)) {
-            //qDebug() << "Hiding column" << i;
+            qDebug() << "Hiding column as internal " << i;
             horizontalHeader()->hideSection(i);
         }
         /* If Mixxx starts the first time or the header states have been cleared
@@ -246,7 +246,7 @@ void WTrackTableView::loadTrackModel(QAbstractItemModel* model, bool restoreStat
          */
         if (trackModel->isColumnHiddenByDefault(i) &&
                 !header->hasPersistedHeaderState()) {
-            //qDebug() << "Hiding column" << i;
+            qDebug() << "Hiding column by default+state " << i;
             horizontalHeader()->hideSection(i);
         }
     }

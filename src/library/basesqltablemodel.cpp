@@ -60,6 +60,19 @@ void BaseSqlTableModel::initHeaderProperties() {
     setHeaderProperties(ColumnCache::COLUMN_PLAYLISTTRACKSTABLE_DATETIMEADDED,
             tr("Timestamp"),
             80);
+    // Add additional stems mix columns
+    setHeaderProperties(ColumnCache::COLUMN_STEMSMIXTRACKSTABLE_ABSOLUTEBARINDEX,
+            tr("Absolute Bar Index"),
+            40);
+    setHeaderProperties(ColumnCache::COLUMN_STEMSMIXTRACKSTABLE_TRACKBARINDEX,
+            tr("Track Bar Index"),
+            40);
+    setHeaderProperties(ColumnCache::COLUMN_STEMSMIXTRACKSTABLE_DURATIONBARS,
+            tr("Duration Bars"),
+            40);
+    setHeaderProperties(ColumnCache::COLUMN_STEMSMIXTRACKSTABLE_STEMID,
+            tr("Stem ID"),
+            40);
 }
 
 void BaseSqlTableModel::initSortColumnMapping() {

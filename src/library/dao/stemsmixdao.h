@@ -24,6 +24,11 @@ const QString STEMSMIXTRACKSTABLE_POSITION = QStringLiteral("position");
 const QString STEMSMIXTRACKSTABLE_STEMSMIXID = QStringLiteral("stemsmix_id");
 const QString STEMSMIXTRACKSTABLE_DATETIMEADDED = QStringLiteral("pl_datetime_added");
 
+const QString STEMSMIXTRACKSTABLE_ABSOLUTEBARINDEX = QStringLiteral("absolute_bar_index");
+const QString STEMSMIXTRACKSTABLE_TRACKBARINDEX = QStringLiteral("track_bar_index");
+const QString STEMSMIXTRACKSTABLE_DURATIONBARS = QStringLiteral("duration_bars");
+const QString STEMSMIXTRACKSTABLE_STEMID = QStringLiteral("stem_id");
+
 #define AUTODJ_TABLE "Auto DJ"
 
 class AutoDJProcessor;

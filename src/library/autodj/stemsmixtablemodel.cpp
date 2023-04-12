@@ -94,7 +94,11 @@ void StemsMixTableModel::setTableModel(int stemsmixId) {
             << "'' AS " + LIBRARYTABLE_PREVIEW
             // For sorting the cover art column we give LIBRARYTABLE_COVERART
             // the same value as the cover digest.
-            << LIBRARYTABLE_COVERART_DIGEST + " AS " + LIBRARYTABLE_COVERART;
+            << LIBRARYTABLE_COVERART_DIGEST + " AS " + LIBRARYTABLE_COVERART
+            << STEMSMIXTRACKSTABLE_ABSOLUTEBARINDEX
+            << STEMSMIXTRACKSTABLE_TRACKBARINDEX
+            << STEMSMIXTRACKSTABLE_DURATIONBARS
+            << STEMSMIXTRACKSTABLE_STEMID;
 
     QString queryString = QString(
             "CREATE TEMPORARY VIEW IF NOT EXISTS %1 AS "
